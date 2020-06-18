@@ -16,6 +16,7 @@ class Form extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(this.state.newItem);
   }
 
 	render() {
