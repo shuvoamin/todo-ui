@@ -32,14 +32,19 @@ class Form extends React.Component {
 
 	render() {
   	return (
-    	<form onSubmit={this.handleSubmit}>
-        <input 
-          value={this.state.newItem} 
-          onChange={event => this.setState({ newItem : event.target.value })}
-          type="text" 
-          placeholder="Todo item"
-          required/>
-        <button>Add</button>
+    	<form onSubmit={this.handleSubmit} className="form-inline">
+        <div class="input-group mb-3">
+          <input 
+            value={this.state.newItem} 
+            onChange={event => this.setState({ newItem : event.target.value })}
+            type="text" 
+            placeholder="Todo item"
+            className="form-control"
+            required/>
+          <div class="input-group-append">
+            <button className="btn btn-primary">Add</button>
+          </div>
+        </div>
     	</form>
     );
   }
@@ -49,9 +54,9 @@ class Todo extends React.Component {
   render() {
     const todoItem = this.props;
     return (
-      <div>
-        <div>{todoItem.name}</div>
-      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{todoItem.name}</li>
+      </ul>
     )
   }
 }
@@ -97,11 +102,23 @@ class App extends React.Component {
       return <div>Loading...</div>;
     } else {
       return (
+
         <div>
-          <div className="header">{this.props.title}</div>
-          <Form onSubmit={this.addTodoItem}/>
-          <TodoList todoItems={todoItems} />
+        <br />
+        <div className="container">
+          <div className="row">
+            <div className=" col-lg-offset-4 col-lg-8">
+            <div className="card">
+              <div className="card-header bg-primary text-white">{this.props.title}</div>
+              <div className="card-body">
+                <Form onSubmit={this.addTodoItem}/>
+                <TodoList todoItems={todoItems} />
+              </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
       )
     }
   }
