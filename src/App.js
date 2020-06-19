@@ -5,7 +5,7 @@ const apiUrl = "https://todoapi-demo.azurewebsites.net/api/todoitems";
 
 const TodoList = (props) => (
   <div>
-    {props.todoItems.map(todoItem => <Todo {...todoItem}/>)}
+    {props.todoItems.map(todoItem => <Todo key={todoItem.id} {...todoItem}/>)}
   </div>
 );
 
@@ -17,6 +17,19 @@ class Form extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
     console.log(this.state.newItem);
+
+    const resp = await fetch(apiUrl, {
+      method: 'POST',
+      body: JSON.stringify(this.state.newItem),
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    })
+
+    this.props.onSubmit(resp.data);
+
+    console.log(resp.data);
+    this.setState({ newItem: '' });
   }
 
 	render() {
@@ -71,6 +84,13 @@ class App extends React.Component {
       )
   }
 
+  addTodoItem = (newTodoItem) => {
+    console.log(newTodoItem);
+    this.setState(prevState => ({
+    	todoItems: [...prevState.todoItems, newTodoItem],
+    }));
+  }
+
   render() {
     const { error, isLoaded, todoItems } = this.state;
 
@@ -82,7 +102,7 @@ class App extends React.Component {
       return (
         <div>
           <div className="header">{this.props.title}</div>
-          <Form />
+          <Form onSubmit={this.addTodoItem}/>
           <TodoList todoItems={todoItems} />
         </div>
       )
