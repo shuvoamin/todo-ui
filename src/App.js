@@ -16,7 +16,6 @@ class Form extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(this.state.newItem);
 
     const requestOptions = {
       method: 'POST',
@@ -25,10 +24,9 @@ class Form extends React.Component {
     };
 
     const resp = await fetch(apiUrl, requestOptions);
-    
-    console.log(resp);
+    const data = await resp.json();
 
-    this.props.onSubmit(resp.data);
+    this.props.onSubmit(data);
     this.setState({ newItem: '' });
   }
 
@@ -85,7 +83,6 @@ class App extends React.Component {
   }
 
   addTodoItem = (newTodoItem) => {
-    console.log(newTodoItem);
     this.setState(prevState => ({
     	todoItems: [...prevState.todoItems, newTodoItem],
     }));
