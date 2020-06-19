@@ -18,15 +18,16 @@ class Form extends React.Component {
     event.preventDefault();
     console.log(this.state.newItem);
 
-    const resp = await fetch(apiUrl, {
+    const requestOptions = {
       method: 'POST',
-      body: JSON.stringify(this.state.newItem),
-      headers: {
-          'Content-Type': 'application/json'
-      }
-    })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: this.state.newItem })
+    };
 
+    const resp = await fetch(apiUrl, requestOptions);
+    
     console.log(resp);
+
     this.props.onSubmit(resp.data);
     this.setState({ newItem: '' });
   }
