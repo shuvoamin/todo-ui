@@ -26,9 +26,8 @@ class Form extends React.Component {
       }
     })
 
+    console.log(resp);
     this.props.onSubmit(resp.data);
-
-    console.log(resp.data);
     this.setState({ newItem: '' });
   }
 
@@ -39,8 +38,8 @@ class Form extends React.Component {
           value={this.state.newItem} 
           onChange={event => this.setState({ newItem : event.target.value })}
           type="text" 
-          placeholder="Todo item" r
-          equired/>
+          placeholder="Todo item"
+          required/>
         <button>Add</button>
     	</form>
     );
