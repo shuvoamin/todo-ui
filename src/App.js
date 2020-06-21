@@ -51,11 +51,37 @@ class Form extends React.Component {
 }
 
 class Todo extends React.Component {
+
+  handleDeleteItem = async () => {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    };
+
+    const resp = await fetch(`${apiUrl}/${this.props.id}`, requestOptions);
+
+    const refreshResponse = await fetch(apiUrl);
+    const refreshedTodoItems = await refreshResponse.json();
+
+    // TODO fix manual refresh
+    window.location.reload();
+  }
+
   render() {
     const todoItem = this.props;
     return (
       <ul class="list-group list-group-flush">
-        <li class="list-group-item">{todoItem.name}</li>
+        <li class="list-group-item">
+          {todoItem.name}
+          <button 
+            onClick={this.handleDeleteItem}
+            data-item-id={todoItem.id} 
+            type="button" 
+            class="close" 
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </li>
       </ul>
     )
   }
