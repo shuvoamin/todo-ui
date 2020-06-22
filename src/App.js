@@ -70,14 +70,14 @@ class Todo extends React.Component {
   render() {
     const todoItem = this.props;
     return (
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item">
           {todoItem.name}
           <button 
             onClick={this.handleDeleteItem}
             data-item-id={todoItem.id} 
             type="button" 
-            class="close" 
+            className="close" 
             aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
