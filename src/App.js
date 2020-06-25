@@ -3,11 +3,34 @@ import './App.css';
 
 const apiUrl = "https://todoapi-demo.azurewebsites.net/api/todoitems";
 
-const TodoList = (props) => (
-  <div>
-    {props.todoItems.map(todoItem => <Todo key={todoItem.id} {...todoItem}/>)}
-  </div>
-);
+class TodoList extends React.Component {
+
+  handleDelete = async (event) => {
+    event.preventDefault();
+
+    const id = event.target.parentNode.dataset.itemId;
+
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    };
+  
+    const response = await fetch(`${apiUrl}/${id}`, requestOptions)
+    const data = await response.json();
+
+    this.props.onDelete(data);
+  }
+
+  render() {
+    return(
+      <div>
+        {this.props.todoItems.map(todoItem => 
+          <Todo onDelete={this.handleDelete} key={todoItem.id} {...todoItem}/>
+        )}
+      </div>
+    )
+  }
+}
 
 class Form extends React.Component {
   state = {
@@ -33,7 +56,7 @@ class Form extends React.Component {
 	render() {
   	return (
     	<form onSubmit={this.handleSubmit} className="form-inline">
-        <div class="input-group mb-3">
+        <div className="input-group mb-3">
           <input 
             value={this.state.newItem} 
             onChange={event => this.setState({ newItem : event.target.value })}
@@ -41,7 +64,7 @@ class Form extends React.Component {
             placeholder="Todo item"
             className="form-control"
             required/>
-          <div class="input-group-append">
+          <div className="input-group-append">
             <button className="btn btn-primary">Add</button>
           </div>
         </div>
@@ -52,30 +75,14 @@ class Form extends React.Component {
 
 class Todo extends React.Component {
 
-  handleDeleteItem = async () => {
-    const requestOptions = {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' }
-    };
-
-    const resp = await fetch(`${apiUrl}/${this.props.id}`, requestOptions);
-
-    const refreshResponse = await fetch(apiUrl);
-    const refreshedTodoItems = await refreshResponse.json();
-
-    // TODO fix manual refresh
-    window.location.reload();
-  }
-
   render() {
-    const todoItem = this.props;
     return (
       <ul className="list-group list-group-flush">
         <li className="list-group-item">
-          {todoItem.name}
+          {this.props.name}
           <button 
-            onClick={this.handleDeleteItem}
-            data-item-id={todoItem.id} 
+            onClick={this.props.onDelete}
+            data-item-id={this.props.id} 
             type="button" 
             className="close" 
             aria-label="Close">
@@ -119,6 +126,12 @@ class App extends React.Component {
     }));
   }
 
+  deleteItem = (data) => {
+    this.setState({ 
+        todoItems: this.state.todoItems.filter(s => s.id !== data.id) 
+      });
+  }
+
   render() {
     const { error, isLoaded, todoItems } = this.state;
 
@@ -128,7 +141,6 @@ class App extends React.Component {
       return <div>Loading...</div>;
     } else {
       return (
-
         <div>
         <br />
         <div className="container">
@@ -138,13 +150,13 @@ class App extends React.Component {
               <div className="card-header bg-primary text-white">{this.props.title}</div>
               <div className="card-body">
                 <Form onSubmit={this.addTodoItem}/>
-                <TodoList todoItems={todoItems} />
+                <TodoList todoItems={todoItems} onDelete={this.deleteItem}/>
               </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+        </div>
       )
     }
   }
