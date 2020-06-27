@@ -145,17 +145,17 @@ class App extends React.Component {
         <br />
         <div className="container">
           <div className="row">
-            <div className=" col-lg-offset-4 col-lg-8">
-            <div className="card">
-              <div className="card-header bg-primary text-white">{this.props.title}</div>
-              <div className="card-body">
-                <Form onSubmit={this.addTodoItem}/>
-                <TodoList todoItems={todoItems} onDelete={this.deleteItem}/>
-              </div>
+            <div className="mx-auto">
+              <div className="card">
+                <div className="card-header bg-primary text-white">{this.props.title}</div>
+                  <div className="card-body">
+                    <Form onSubmit={this.addTodoItem}/>
+                    <TodoList todoItems={todoItems} onDelete={this.deleteItem}/>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       )
     }
